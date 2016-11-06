@@ -14,10 +14,10 @@ public class OpenHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_ACCOUNT = "ACCOUNT";
-    private static final String COLUMN_ID = "_id";
-    private static final String COLUMN_ACC = "tentaikhoan";
-    private static final String COLUMN_PASSWORD = "matkhau";
-    private static final String COLUMN_NAME = "hoten";
+    private static final String COLUMN_ID = "id";
+    private static final String COLUMN_ACC = "username";
+    private static final String COLUMN_PASSWORD = "password";
+    private static final String COLUMN_NAME = "fullname";
 
     private static Context context;
     static SQLiteDatabase db;

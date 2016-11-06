@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+
 import vn.udn.dut.openhelpera.bean.User;
 import vn.udn.dut.openhelpera.utils.OpenHelper;
 
@@ -19,10 +21,10 @@ public class ModelDemo {
     private static SQLiteDatabase db;
 
     private static final String TABLE_ACCOUNT = "ACCOUNT";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_ACC = "tentaikhoan";
-    public static final String COLUMN_PASSWORD = "matkhau";
-    public static final String COLUMN_NAME = "hoten";
+    private static final String COLUMN_ID = "id";
+    private static final String COLUMN_ACC = "username";
+    private static final String COLUMN_PASSWORD = "password";
+    private static final String COLUMN_NAME = "fullname";
 
     private OpenHelper mConnect;
 
@@ -40,8 +42,7 @@ public class ModelDemo {
         mConnect.close();
     }
 
-    // function new SQLiteDatabase().insert()
-    public long addData(User item) {
+    public long addItem(User item) {
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_ACC, item.getUsername());
         cv.put(COLUMN_PASSWORD, item.getPassword());
@@ -49,26 +50,22 @@ public class ModelDemo {
         return db.insert(TABLE_ACCOUNT, null, cv);
     }
 
-    // function new SQLiteDatebase().query()
-    public String getData() {
-        String[] columns = new String[]{COLUMN_ID, COLUMN_ACC, COLUMN_PASSWORD, COLUMN_NAME};
-        Cursor c = db.query(TABLE_ACCOUNT, columns, null, null, null, null, null);
-        String result = "";
-        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            result = result + " " + c.getString(c.getColumnIndex(COLUMN_ID))
-                    + " - id:" + c.getString(c.getColumnIndex(COLUMN_ACC))
-                    + " - pw:" + c.getString(c.getColumnIndex(COLUMN_NAME))
-                    + " - ten:" + c.getString(c.getColumnIndex(COLUMN_PASSWORD)) + "\n";
+    public ArrayList<User> getList(){
+        ArrayList<User> alUser = new ArrayList<>();
+        String[] columns = new String[]{COLUMN_ID,COLUMN_ACC,COLUMN_PASSWORD,COLUMN_NAME};
+        Cursor c = db.query(TABLE_ACCOUNT,columns,null,null,null,null,null);
+        for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()){
+            alUser.add(new User(c.getString(c.getColumnIndex(COLUMN_NAME))));
         }
         c.close();
-        return result;
+        return alUser;
     }
 
-    public int deleteAcc(String username) {
+    public int delItem(String username) {
         return db.delete(TABLE_ACCOUNT, COLUMN_ACC + "='" + username + "'", null);
     }
 
-    public int deleteAccountAll() {
+    public int delAll() {
         return db.delete(TABLE_ACCOUNT, null, null);
     }
 }

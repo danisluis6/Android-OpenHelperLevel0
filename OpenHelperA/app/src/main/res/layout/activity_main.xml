@@ -11,7 +11,7 @@
     android:orientation="vertical"
     tools:context="vn.udn.dut.openhelpera.MainActivity">
     <EditText
-        android:id="@+id/edtUserName"
+        android:id="@+id/edtUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"

@@ -1,67 +1,137 @@
 package vn.udn.dut.openhelpera;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import vn.udn.dut.openhelpera.adapter.ModelDemo;
 import vn.udn.dut.openhelpera.bean.User;
 
+import static android.R.layout.simple_list_item_1;
+
 public class MainActivity extends AppCompatActivity {
 
-    private Button mBtnCreate, mBtnList, mBtnDeleteAll;
+    private Button btnCreate, btnList, btnDeleteAll;
     private ListView lvUser;
-    private EditText mEdtUserName;
-    private EditText mEdtPass;
-    private EditText mEdtName;
+    private EditText edtUser, edtPass, edtName;
     private Button mBtnLogin;
+
     private ModelDemo model = new ModelDemo(this);
+    private ArrayList<User> listItems;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBtnCreate = (Button) findViewById(R.id.btnCreate);
-        mBtnList = (Button) findViewById(R.id.btnList);
-        mBtnDeleteAll = (Button) findViewById(R.id.btnDeleteAll);
-
         lvUser = (ListView) findViewById(R.id.lvUser);
 
-        mEdtUserName = (EditText) findViewById(R.id.edtUserName);
-        mEdtName = (EditText) findViewById(R.id.edtName);
-        mEdtPass = (EditText) findViewById(R.id.edtPass);
+        edtUser = (EditText) findViewById(R.id.edtUser);
+        edtPass = (EditText) findViewById(R.id.edtPass);
+        edtName = (EditText) findViewById(R.id.edtName);
+
+        btnCreate = (Button) findViewById(R.id.btnCreate);
+        btnList = (Button) findViewById(R.id.btnList);
+        btnDeleteAll = (Button) findViewById(R.id.btnDeleteAll);
         mBtnLogin = (Button) findViewById(R.id.btnLogin);
 
-        mBtnCreate.setOnClickListener(new View.OnClickListener() {
+        listItems = new ArrayList<>();
+
+        btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 model.open();
-                model.addData(new User(mEdtUserName.getText().toString(), mEdtPass.getText().toString(), mEdtName.getText().toString()));
+                model.addItem(new User(edtUser.getText().toString(), edtPass.getText().toString(), edtName.getText().toString()));
                 model.close();
+                resetForm();
             }
         });
 
-        mBtnList.setOnClickListener(new View.OnClickListener() {
+        btnList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 model.open();
-                String ds = model.getData();
                 model.close();
-                lvUser.setText(ds);
+                listItems = model.getList();
+                showListView();
             }
         });
 
-        mBtnDeleteAll.setOnClickListener(new View.OnClickListener() {
+        btnDeleteAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 model.open();
-                model.deleteAccountAll();
+                model.delAll();
                 model.close();
             }
         });
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
+
+    public void showListView(){
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
+        lvUser.setAdapter(adapter);
+    }
+
+    public void resetForm(){
+        edtUser.setText("");
+        edtPass.setText("");
+        edtName.setText("");
     }
 }

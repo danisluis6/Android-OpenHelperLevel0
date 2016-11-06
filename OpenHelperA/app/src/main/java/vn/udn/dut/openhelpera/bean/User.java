@@ -18,6 +18,10 @@ public class User {
         this.fullname = fullname;
     }
 
+    public User(String fullname){
+        this.fullname = fullname;
+    }
+
     public String getUsername() {
         return username;
     }

@@ -118,14 +118,58 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="Login" />
-	    <TextView
-		android:id="@+id/textView2"
+	    <ListView
+		android:id="@+id/lvUser"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content" />
+		android:layout_height="wrap_content">
+	    </ListView>
 	</LinearLayout>
 
     - Picture description
 ![alt tag](https://github.com/danisluis6/Android-OpenHelperLevel0/blob/master/OpenHelperA/1.png)
+
+    - Step 2: Create Object User in package bean
+
+	public class User {
+	    private String username;
+	    private String password;
+	    private String fullname;
+
+	    public User() {
+	    }
+
+	    public User(String username, String password, String fullname) {
+		this.username = username;
+		this.password = password;
+		this.fullname = fullname;
+	    }
+
+	    public String getUsername() {
+		return username;
+	    }
+
+	    public String getPassword() {
+		return password;
+	    }
+
+	    public String getFullname() {
+		return fullname;
+	    }
+
+	    public void setUsername(String username) {
+		this.username = username;
+	    }
+
+	    public void setPassword(String password) {
+		this.password = password;
+	    }
+
+	    public void setFullname(String fullname) {
+		this.fullname = fullname;
+	    }
+	}
+
+    - Step 3: Create new adapter call ModelDemo
 
 
 
