@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -54,8 +56,11 @@ public class ModelDemo {
         ArrayList<User> alUser = new ArrayList<>();
         String[] columns = new String[]{COLUMN_ID,COLUMN_ACC,COLUMN_PASSWORD,COLUMN_NAME};
         Cursor c = db.query(TABLE_ACCOUNT,columns,null,null,null,null,null);
+        int iACC = c.getColumnIndex(COLUMN_ACC);
+        int iPASSWORD = c.getColumnIndex(COLUMN_PASSWORD);
+        int iNAME = c.getColumnIndex(COLUMN_NAME);
         for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()){
-            alUser.add(new User(c.getString(c.getColumnIndex(COLUMN_NAME))));
+             alUser.add(new User(c.getString(iACC),c.getString(iPASSWORD),c.getString(iNAME)));
         }
         c.close();
         return alUser;

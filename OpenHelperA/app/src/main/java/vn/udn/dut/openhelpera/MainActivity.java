@@ -3,11 +3,13 @@ package vn.udn.dut.openhelpera;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ModelDemo model = new ModelDemo(this);
     private ArrayList<User> listItems;
+    private List<String> listUsername;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         mBtnLogin = (Button) findViewById(R.id.btnLogin);
 
         listItems = new ArrayList<>();
+        listUsername = new ArrayList<>();
 
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,9 +73,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 model.open();
-                model.close();
                 listItems = model.getList();
-                showListView();
+                for(int i = 0;i<listItems.size();i++){
+                    listUsername.add(new String(listItems.get(i).getFullname()));
+                }
+                model.close();
+                showListView(listUsername);
             }
         });
 
@@ -124,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
         client.disconnect();
     }
 
-    public void showListView(){
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
+    public void showListView(List<String> list){
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         lvUser.setAdapter(adapter);
     }
 
